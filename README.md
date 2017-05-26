@@ -296,7 +296,20 @@ function run(g) {
           }, null, i, g);
         } else if (i.value != undefined && i.value.constructor == Array) {
           setTimeout(function (i, g) {
-            run(Promise.all.apply(null, i.value)).then(function (data) {
+            var arr = i.value.map(function (t) {
+              if (t == null) {
+                return;
+              }
+
+              if (t.constructor == Promise) {
+                return t;
+              }
+
+              if (t.toString() == "[object Generator]") {
+                return run(t);
+              }
+            });
+            Promise.all(arr).then(function (data) {
               innerRun(g, data);
             }).catch(function (e) {
               g.throw(e);
