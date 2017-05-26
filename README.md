@@ -370,3 +370,33 @@ tüm tasklar bitti
 
 * Dizi verilerek birden fazla taskın bitmesini bekleyebilirsiniz
 
+```es6
+function* taskA() {
+  yield delay(2000);
+  console.log("taskA");
+  yield delay(1000);
+  console.log("taskA bitti");
+  return "A";
+}
+
+function* taskB() {
+  yield delay(500);
+  console.log("taskB");
+  yield delay(500);
+  console.log("taskB bitti");
+  return "B";
+}
+
+
+function* taskX() {
+  console.log("taskX");
+  yield delay(1000);
+  let arr = yield [taskA(), taskB()];
+  console.log(arr);
+  yield delay(1000);
+  console.log("taskX bitti");
+}
+
+run(taskX());
+```
+
