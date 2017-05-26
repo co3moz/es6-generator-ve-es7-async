@@ -1,4 +1,4 @@
-# ES6 Generators and yield (TR)
+# ES6 Generatorler and yield (TR)
 Bu repository altında bir ES6 standartı olan yield keyword'ünü inceleyeceğiz.
 
 ## Nedir bu generatorler?
@@ -111,3 +111,100 @@ Bu generatorümüzün herhangi bir sonu yok. Yani done asla true olmayacak.
 
 Generatörlerimizi for-of syntaxı içinde kullanmamız mümkündür. Ancak bir önceki örnekte olduğu gibi sonsuz olmasından kaçının. Her bir iteration'da `.next()` çağrısı yapılacak ve döndürülen değer değişkene yansıtılacak. For gövdesindeki işler tamamlandıktan sonra tekrar `.next()` çağrısı yapılacak. done true olduğu an döngü kırılacak. 
 
+```es6
+function* fibonacci(limit) {
+  let a = 1, b = 1;
+  while(limit--) {
+    console.log("bir sonraki :" + (a + b));
+    yield a + b;
+    let t = b;
+    b = a + b;
+    a = t;
+  }
+  console.log("bitti");
+}
+
+for(sayi of fibonacci(10)) {
+  console.log(sayi);
+}
+```
+
+Bu kodumuzun konsol çıktısı;
+
+```
+bir sonraki :2
+2
+bir sonraki :3
+3
+bir sonraki :5
+5
+bir sonraki :8
+8
+bir sonraki :13
+13
+bir sonraki :21
+21
+bir sonraki :34
+34
+bir sonraki :55
+55
+bir sonraki :89
+89
+bir sonraki :144
+144
+bitti
+```
+
+## next, throw ve return
+`.next()` metodunun bir parametre girişi vardır. Bu girişten vereceğimiz sayı ile yield alanına sayı göndermemiz mümkündür.
+
+```es6
+function* say() {
+  var baslangic = yield;
+  console.log(baslangic);
+}
+
+var s = say();
+s.next(); // yield alanına kadar next yapıyoruz.
+s.next(3); // 3
+```
+
+`.throw()` metodu tıpkı next gibi kodun bulunduğu yerde throw yapar.
+
+```es6
+function* say() {
+  try {
+    yield Math.random();
+  } catch(e) {
+    // sayı 0.5'ten büyük
+    console.log("sayı 0.5'ten büyük");
+  }
+}
+
+var s = say();
+if(s.next().value > 0.5) {
+  s.throw(new Error("0.5'ten büyük olmamalı"));
+}
+```
+
+`.return()` metodu generatorü sonlandırarak ilk parametredeki değeri value olarak döndürür. 
+
+```es6
+function* say() {
+  console.log(1);
+  yield 1;
+  console.log(2);
+  yield 2;
+  console.log(3);
+  yield 3;
+}
+
+var s = say();
+s.next(); // {value: 1, done: false}
+s.return(4); // {value: 4, done: true}
+s.next(); // {value: undefined, done: true}
+```
+
+## Yield ve asenkron işler
+
+Bence tüm bu olayların dışında yield'ın en güzel olayı asenkron işleri yapmakta çatı sağlaması. Şimdi teorik olarak düşünelim. yield bir fonksiyon generatörünü durduruyor. 
