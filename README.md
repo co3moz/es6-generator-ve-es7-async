@@ -1,2 +1,3 @@
-# ES6-yield-examples
-Basic information about ES6 yield syntax and making simple library.
+# ES6 Yield Examples (TR)
+Bu repository altında bir ES6 standartı olan yield keyword'ünü inceleyeceğiz.
+
