@@ -207,4 +207,153 @@ s.next(); // {value: undefined, done: true}
 
 ## Yield ve asenkron işler
 
-Bence tüm bu olayların dışında yield'ın en güzel olayı asenkron işleri yapmakta çatı sağlaması. Şimdi teorik olarak düşünelim. yield bir fonksiyon generatörünü durduruyor. 
+Bence tüm bu olayların dışında yield'ın en güzel olayı asenkron işleri yapmakta çatı sağlaması. Şimdi teorik olarak düşünelim. yield bir fonksiyon generatörünü durduruyor. Sadece durdurmakla kalmıyor bize veride veriyor. Biz yield'ta promise alsak, ve bu promise'nin bittiğinde başka bir next çağırmasını sağlasak callbacklerden kurtulmuş olmaz mıyız?
+
+```es6
+function* asenkron() {
+  yield new Promise(function(resolve) {
+    setTimeout(function() {
+      resolve();
+    }, 1000);
+  });
+  console.log("merhaba");
+}
+
+var s = asenkron();
+var promise = s.next().value; // {value: Promise, done: false}
+promise.then(function() {
+  s.next();
+});
+```
+
+Bu kod ile 1 saniye bekledikten sonra merhaba yazdırdık. Öyle bir fonksiyon tasarlayalım ki bu işi bizim yerimize o yapsın.
+
+```es6
+function run(g) {
+  var i = g.next();
+  if (!i.done) {
+    if (i.value && i.value.constructor == Promise) {
+      i.value.then(function (data) {
+        run(g);
+      }).catch(function (e) {
+        g.throw(e);
+      });
+    } else {
+      run(g);
+    }
+  }
+}
+```
+
+Tabi ki bu kod inanılmaz derecede basit tutuldu ve bu yüzden de bellek açığı var. Kullanmak çok basit tek yapılması gereken `run(generator())` çağrısı yapmak. Yukarda daha önce tanımladığımız delay işlemini fonksiyon halinede getirelim.
+
+```es6
+function delay(time) {
+  return new Promise(function(resolve) {
+    setTimeout(function() {
+      resolve();
+    }, time);
+  });
+}
+```
+
+```es6
+function* merhaba() {
+  yield delay(1000);
+  console.log("merhaba");
+  
+  yield delay(1000);
+  console.log("dünya");
+}
+run(merhaba());
+```
+
+Gerçekten çok rahat okunabilir bu kod ile 1 saniye aralıklarla merhaba dünya yazdırdık.
+
+Bu run metodunu biraz daha mükemmelleştirip aşağıdaki haline getirdim. Ancak bu sefer pek direkt satır satır anlaşılmıyor. Zaten bu kısmın kullanıcı tarafından anlaşılmasına pek gerek yok. 
+
+```es6
+function run(g) {
+  return new Promise(function (resolve, reject) {
+    (function innerRun(g, data) {
+      var i = g.next(data);
+      if (!i.done) {
+        if (i.value != undefined && i.value.constructor == Promise) {
+          i.value.then(function (data) {
+            setTimeout(function (g) {
+              innerRun(g, data);
+            }, null, g);
+          }).catch(function (e) {
+            g.throw(e);
+          });
+        } else if (i.value != undefined && i.value.toString() == "[object Generator]") {
+          setTimeout(function (i, g) {
+            run(i.value).then(function (data) {
+              innerRun(g, data);
+            }).catch(function (e) {
+              g.throw(e);
+            });
+          }, null, i, g);
+        } else if (i.value != undefined && i.value.constructor == Array) {
+          setTimeout(function (i, g) {
+            run(Promise.all.apply(null, i.value)).then(function (data) {
+              innerRun(g, data);
+            }).catch(function (e) {
+              g.throw(e);
+            });
+          }, null, i, g);
+        } else {
+          setTimeout(function (i, g) {
+            innerRun(g, i.value);
+          }, null, i, g);
+        }
+      } else {
+        resolve(i.value);
+      }
+    })(g);
+  });
+}
+```
+
+Bu fonksiyon ile aşağıdaki işlemleri yapabilirsiniz;
+
+* Promise döndürerek bitişi takip etmek.
+
+```es6
+run(generator()).then(function() {
+
+});
+```
+
+* Promise hata verdiğinde ilgili satırda exception fırlatımı
+* Kod içerisinde başka bir generator fonksiyonu çağırabilirsiniz. örneğin;
+
+```es6
+function* taskA() {
+  console.log("taskA");
+  yield taskB();
+  console.log("taskA bitti");
+}
+
+function* taskB() {
+  console.log("taskB");
+  yield delay(1000);
+  console.log("taskB bitti");
+}
+
+run(taskA()).then(function() {
+  console.log("tüm tasklar bitti");
+});
+```
+
+```
+taskA
+taskB
+* 1 saniye bekler
+taskB bitti
+taskA bitti
+tüm tasklar bitti
+```
+
+* Dizi verilerek birden fazla taskın bitmesini bekleyebilirsiniz
+
