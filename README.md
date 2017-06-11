@@ -34,7 +34,7 @@ function* generator() {
 }
 
 var g = generator();
-g.next(); // "merhaba yazıldı" ve {value: undefined, done: true} döndürüldü
+g.next(); // "merhaba" yazıldı ve {value: undefined, done: true} döndürüldü
 ```
 
 Gördüğünüz gibi metod başka bir obje döndürdü. Burada value undefined olarak atanmış ve done ise true. done ifadesi generatör fonksiyonun tüm işlevinin bittiğini gösteriyor. Value ise return edilen değeri getiriyor. 
