@@ -37,15 +37,15 @@ var g = generator();
 g.next(); // "merhaba" yazıldı ve {value: undefined, done: true} döndürüldü
 ```
 
-Gördüğünüz gibi metod başka bir obje döndürdü. Burada value undefined olarak atanmış ve done ise true. done ifadesi generatör fonksiyonun tüm işlevinin bittiğini gösteriyor. Value ise return edilen değeri getiriyor. 
+Gördüğünüz gibi metod başka bir obje döndürdü. Burada `value` undefined olarak atanmış ve `done` ise true. `done` ifadesi generatör fonksiyonun tüm işlevinin bittiğini gösteriyor. `value` ise return edilen değeri getiriyor. 
 
 Buraya kadar normal fonksiyonun dışında farklı bir işlem göremedik ancak işler daha yeni kızışmaya başladı.
 
 ## Yield
 
-Generatörlerin done objesi döndürdüğünü gördük, demek ki biz generatörleri bir şey kullanarak durdurabiliyoruz. İşte aradığımız keyword `yield`tır.
+Generatörlerin done objesi döndürdüğünü gördük, demek ki biz generatörleri bir şey kullanarak durdurabiliyoruz. `yield` bu işi yapmamızı sağlayan özelliktir. .
 
-Yield tıpkı return gibi fonksiyondan çıkışı sağlar. Ancak returnun aksine çıkılan bu fonksiyona tekrar girişi mümkün kılar. Sadece bu da değil; çıkılan noktaya dışardan değer girilebilmesinide sağlar.
+`yield` tıpkı return gibi fonksiyondan çıkışı sağlar ancak returnun aksine çıkılan bu fonksiyona tekrar girişi mümkün kılar. Sadece bu da değil; çıkılan noktaya dışardan değer girilebilmesinide sağlar.
 
 ```es6
 function* generator() {
