@@ -235,7 +235,7 @@ function run(g) {
   var i = g.next(); // bir sonraki değeri getir
   if (!i.done) { // eğer bitmediyse
     if (i.value && i.value.constructor == Promise) { // dönen değer promise ise
-      i.value.then(function (data) { // promise'in bitmesini bkele
+      i.value.then(function (data) { // promise'in bitmesini bekle
         run(g); // yeniden kendini çağır
       }).catch(function (e) { // hata oluştuysa
         g.throw(e); // ilgili yerde hata fırlat
