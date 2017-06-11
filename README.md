@@ -487,8 +487,8 @@ taskA().then(function(sonuc) {
 
 Örnektede görüldüğü gibi await'i herhangi bir expression içinde kullanmamız mümkün. Bu sayede bir değişkene değer atayabiliriz. Döndürdüğümüz değer await'in bulunduğu konuma yerleştirilecektir.
 
->> **Önemli Not:** Bu tüm işlemler sırasında try catch kullanmanız şiddetle önerilir. İlerki Node.js sürümlerinde eğer promisede oluşmuş bir hata varsa ve catch ile yakalanmamışsa uygulama çökmüş gibi `process.exit()` işlemi yapılacaktır.
+> **Önemli Not:** Bu tüm işlemler sırasında try catch kullanmanız şiddetle önerilir. İlerki Node.js sürümlerinde eğer promisede oluşmuş bir hata varsa ve catch ile yakalanmamışsa uygulama çökmüş gibi `process.exit()` işlemi yapılacaktır.
 
->> **Not:** `await` keywordune `null` verirsek bir hataya neden olmayacaktır.
+> **Not:** `await` keywordune `null` verirsek bir hataya neden olmayacaktır.
 
->> **Not:** `await` keywordune promise harici bir değer verirsek direkt olarak pass edecektir yani `let t = await 1;` yaparsanız t değeri direkt 1 olacaktır. Normal fonksiyonları versenizde aynı şekide pass işlemi yapılacaktır.
+> **Not:** `await` keywordune promise harici bir değer verirsek direkt olarak pass edecektir yani `let t = await 1;` yaparsanız t değeri direkt 1 olacaktır. Normal fonksiyonları versenizde aynı şekide pass işlemi yapılacaktır.
