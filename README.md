@@ -407,7 +407,7 @@ run(taskX());
 ES6'da asenkron işleri yönetmenin kolay yolunu gördük. Ancak yield'i direkt olarak fonksiyon çağrısı yaparak kullanamıyoruz. `run()` methoduna ihtiyacımız var. ES7'de bu ihtiyaç kaldırılarak `async function` syntax'ı gelmiştir.
 
 
-```es7
+```ts
 async function merhaba() {
 
 }
@@ -415,7 +415,7 @@ async function merhaba() {
 
 Yukardaki gibi asenkron fonksiyon tanımlaması yapabiliriz. 
 
-```es7
+```ts
 async function merhaba() {
   console.log("merhaba");
 }
@@ -424,7 +424,7 @@ merhaba();
 
 ES6'da `run()` methodunu kullanmamız gerekirken, burada direkt olarak fonksiyon çağrısı yaptık. Asenkron fonksiyonları sanki promise yapısına çeviren bir keyword olarak düşünebiliriz.
 
-```es7
+```ts
 async function selam() {
   console.log("merhaba");
 }
@@ -450,7 +450,7 @@ selam().then(function() {
 
 Peki bu async fonksiyonlarla neler yapabilirim. ES6'da `yield`'ı asenkron işleri bekletmek için kullanabiliyorduk. ES7'de bu iş için `await` keywordu bulunmaktadır.
 
-```es7
+```ts
 function delay(ms) {
   return new Promise(function(resolve) {
     setTimeout(resolve, ms)
@@ -468,7 +468,7 @@ selam();
 
 async fonksiyonlar promise döndürdüğü için bir async fonksiyonu içinde await ile başka bir async fonksiyonu bekletebiliriz.
 
-```es7
+```ts
 async function taskA() {
   console.log("A");
   let b = await taskB();
