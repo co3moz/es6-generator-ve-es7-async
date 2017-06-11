@@ -387,7 +387,7 @@ function selam() {
   });
 }
 
-// bir asenkron fonksiyon her daim bir promise döndürecektir.
+//  asenkron fonksiyon mutlaka bir promise döndürür.
 selam().then(function() {
   console.log("çalıştı");
 })
