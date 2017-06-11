@@ -1,5 +1,7 @@
-# ES6 Generatorler and yield (TR)
-Bu repository altında bir ES6 standartı olan yield keyword'ünü inceleyeceğiz.
+# ES6 generator and ES7 async functions (TR)
+Bu repository altında ES6'da bulunan generatör fonksiyonlarını ve ES7'de bulunan async fonksiyonlarını inceleyeceğiz.
+
+# ES6 - Generatörler
 
 ## Nedir bu generatorler?
 Generatörler adlandırıldığı gibi bir takım fonksiyondur. Normal bir fonksiyondan farklı olarak çalışma zamanından kaldığı yerden devam etme özelliği taşırlar. Bu sayede bir işi üretirken bir anda döndürmek yerine parça parça döndürebilme yeteneğine sahiptirler.
@@ -400,3 +402,89 @@ function* taskX() {
 run(taskX());
 ```
 
+# ES7 - Async fonksiyonlar
+
+ES6'da asenkron işleri yönetmenin kolay yolunu gördük. Ancak yield'i direkt olarak fonksiyon çağrısı yaparak kullanamıyoruz. `run()` methoduna ihtiyacımız var. ES7'de bu ihtiyaç kaldırılarak `async function` syntax'ı gelmiştir.
+
+
+```es7
+async function merhaba() {
+
+}
+```
+
+Yukardaki gibi asenkron fonksiyon tanımlaması yapabiliriz. 
+
+```es7
+async function merhaba() {
+  console.log("merhaba");
+}
+merhaba();
+```
+
+ES6'da `run()` methodunu kullanmamız gerekirken, burada direkt olarak fonksiyon çağrısı yaptık. Asenkron fonksiyonları sanki promise yapısına çeviren bir keyword olarak düşünebiliriz.
+
+```es7
+async function selam() {
+  console.log("merhaba");
+}
+
+// aşağıdaki gibi derleniyor
+
+function selam() {
+  return new Promise(function(resolve, reject) {
+    try {
+      console.log("merhaba");
+      resolve();
+    } catch(e) {
+      reject(e);
+    }
+  });
+}
+
+// yeni bir asenkron fonksiyonu her daim bir promise döndürecektir.
+selam().then(function() {
+  console.log("çalıştı");
+})
+```
+
+Peki bu async fonksiyonlarla neler yapabilirim. ES6'da `yield`'ı asenkron işleri bekletmek için kullanabiliyorduk. ES7'de bu iş için `await` keywordu bulunmaktadır.
+
+```es7
+function delay(ms) {
+  return new Promise(function(resolve) {
+    setTimeout(resolve, ms)
+  });
+}
+
+async function selam() {
+  console.log("merhaba");
+  await delay(1000);
+  console.log("dünya");
+}
+
+selam();
+```
+
+async fonksiyonlar promise döndürdüğü için bir async fonksiyonu içinde await ile başka bir async fonksiyonu bekletebiliriz.
+
+```es7
+async function taskA() {
+  console.log("A");
+  let b = await taskB();
+  return "A" + b;
+}
+
+async function taskB() {
+  console.log("B");
+  return "B";
+}
+
+taskA().then(function(sonuc) {
+  console.log(sonuc); // AB
+})
+```
+
+Örnektede görüldüğü gibi await'i herhangi bir expression içinde kullanmamız mümkün. Bu sayede bir değişkene değer atayabiliriz. Döndürdüğümüz değer await'in bulunduğu konuma yerleştirilecektir.
+
+>> **Önemli not:** Bu tüm işlemler sırasında try catch kullanmanız şiddetle önerilir. İlerki Node.js sürümlerinde eğer promisede oluşmuş bir hata varsa ve catch ile yakalanmamışsa uygulama çökmüş gibi `process.exit()` işlemi yapılacaktır.
