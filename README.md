@@ -43,7 +43,7 @@ Buraya kadar normal fonksiyonun dışında farklı bir işlem göremedik ancak i
 
 ## Yield
 
-Generatörlerin done objesi döndürdüğünü gördük, demek ki biz generatörleri bir şey kullanarak durdurabiliyoruz. `yield` bu işi yapmamızı sağlayan özelliktir. .
+Generatörlerin `done` değeri döndürdüğünü gördük, demek ki biz generatörleri bir şey kullanarak durdurabiliyoruz. `yield` bu işi yapmamızı sağlayan özelliktir.
 
 `yield` tıpkı return gibi fonksiyondan çıkışı sağlar ancak returnun aksine çıkılan bu fonksiyona tekrar girişi mümkün kılar. Sadece bu da değil; çıkılan noktaya dışardan değer girilebilmesinide sağlar.
 
@@ -57,7 +57,7 @@ var g = generator();
 g.next(); // "merhaba" yazıldı ve {value: undefined, done: false} döndürüldü
 ```
 
-Gördüğünüz gibi bu sefer done değeri false oldu. Eğer bir defa daha `.next()` metodunu çalıştırırsak;
+Gördüğünüz gibi bu sefer `done` değeri false oldu. Eğer bir defa daha `.next()` metodunu çalıştırırsak;
 
 ```js
 function* generator() {
@@ -70,9 +70,9 @@ g.next(); // "merhaba" yazıldı ve {value: undefined, done: false} döndürüld
 g.next(); // {value: undefined, done: true} döndürüldü
 ```
 
-Done değeri true olacak. `.next()` metodu çağrıldığında yield ifadesine gelinceye kadar tüm kodlar sırayla çalıştırılır. yield ifadesi geldiğinde eğer return gibi sağında bir değer işlem varsa yapılır, döndürdüğü değer ise `.next()` methodunun döndürdüğü objenin value property'sine yazılır.
+`done` değeri `true` olacak. `.next()` metodu çağrıldığında `yield` ifadesine gelinceye kadar tüm kodlar sırayla çalıştırılır. `yield` ifadesi geldiğinde eğer return gibi sağında bir değer işlem varsa yapılır, döndürdüğü değer ise `.next()` methodunun döndürdüğü objenin `value` property'sine yazılır.
 
-Eğer bir değer döndürmek istersek yield'in sağına yazabiliriz.
+Eğer bir değer döndürmek istersek `yield`'in sağına yazabiliriz.
 
 ```ts
 function* generator() {
@@ -88,7 +88,7 @@ g.next(); // {value: 9, done: false}
 g.next(); // {value: 10, done: true}
 ```
 
-Bu fikirden yola çıkarak fibonacci sayılarını generate edebiliriz.
+Bu fikirden yola çıkarak `fibonacci sayılarını` generate edebiliriz.
 
 ```ts
 function* fibonacci() {
@@ -108,11 +108,11 @@ g.next(); // {value: 5, done: false}
 g.next(); // {value: 8, done: false}
 ```
 
-Bu generatorümüzün herhangi bir sonu yok. Yani done asla true olmayacak.
+Bu generatorümüzün herhangi bir sonu yok. Yani `done` asla true olmayacak.
 
 ## for-of altında generatörler
 
-Generatörlerimizi for-of syntaxı içinde kullanmamız mümkündür. Ancak bir önceki örnekte olduğu gibi sonsuz olmasından kaçının. Her bir iteration'da `.next()` çağrısı yapılacak ve döndürülen değer değişkene yansıtılacak. For gövdesindeki işler tamamlandıktan sonra tekrar `.next()` çağrısı yapılacak. done true olduğu an döngü kırılacak. 
+Generatörlerimizi `for-of` syntaxı içinde kullanmamız mümkündür. Ancak bir önceki örnekte olduğu gibi sonsuz olmasından kaçının. Her bir iteration'da `.next()` çağrısı yapılacak ve döndürülen değer değişkene yansıtılacak. For gövdesindeki işler tamamlandıktan sonra tekrar `.next()` çağrısı yapılacak. `done` `true` olduğu an döngü kırılacak. 
 
 ```ts
 function* fibonacci(limit) {
@@ -159,7 +159,7 @@ bitti
 ```
 
 ## next, throw ve return
-`.next()` metodunun bir parametre girişi vardır. Bu girişten vereceğimiz sayı ile yield alanına sayı göndermemiz mümkündür.
+`.next()` metodunun bir parametre girişi vardır. Bu girişten vereceğimiz sayı ile `yield` alanına sayı göndermemiz mümkündür.
 
 ```ts
 function* say() {
@@ -172,15 +172,14 @@ s.next(); // yield alanına kadar next yapıyoruz.
 s.next(3); // 3
 ```
 
-`.throw()` metodu tıpkı next gibi kodun bulunduğu yerde throw yapar.
+`.throw()` metodu tıpkı next gibi kodun bulunduğu yerde `throw` yapar.
 
 ```ts
 function* say() {
   try {
     yield Math.random();
   } catch(e) {
-    // sayı 0.5'ten büyük
-    console.log("sayı 0.5'ten büyük");
+    console.error(e); // 0.5'ten büyük olmamalı
   }
 }
 
@@ -210,7 +209,7 @@ s.next(); // {value: undefined, done: true}
 
 ## Yield ve asenkron işler
 
-Bence tüm bu olayların dışında yield'ın en güzel olayı asenkron işleri yapmakta çatı sağlaması. Şimdi teorik olarak düşünelim. yield bir fonksiyon generatörünü durduruyor. Sadece durdurmakla kalmıyor bize veride veriyor. Biz yield'ta promise alsak, ve bu promise'nin bittiğinde başka bir next çağırmasını sağlasak callbacklerden kurtulmuş olmaz mıyız?
+Bence tüm bu olayların dışında `yield`'ın en güzel olayı asenkron işleri yapmakta çatı sağlaması. Şimdi teorik olarak düşünelim. `yield` bir fonksiyon generatörünü durduruyor. Sadece durdurmakla kalmıyor bize veride veriyor. Biz `yield`'da `promise` versek, ve bu `promise` bittiğinde başka bir next çağırmasını sağlasak callbacklerden kurtulmuş olmaz mıyız?
 
 ```ts
 function* asenkron() {
@@ -233,22 +232,22 @@ Bu kod ile 1 saniye bekledikten sonra merhaba yazdırdık. Öyle bir fonksiyon t
 
 ```ts
 function run(g) {
-  var i = g.next();
-  if (!i.done) {
-    if (i.value && i.value.constructor == Promise) {
-      i.value.then(function (data) {
-        run(g);
-      }).catch(function (e) {
-        g.throw(e);
+  var i = g.next(); // bir sonraki değeri getir
+  if (!i.done) { // eğer bitmediyse
+    if (i.value && i.value.constructor == Promise) { // dönen değer promise ise
+      i.value.then(function (data) { // promise'in bitmesini bkele
+        run(g); // yeniden kendini çağır
+      }).catch(function (e) { // hata oluştuysa
+        g.throw(e); // ilgili yerde hata fırlat
       });
-    } else {
+    } else { // eğer promise değilse sadece devam et
       run(g);
     }
   }
 }
 ```
 
-Tabi ki bu kod inanılmaz derecede basit tutuldu ve bu yüzden de bellek açığı var. Kullanmak çok basit tek yapılması gereken `run(generator())` çağrısı yapmak. Yukarda daha önce tanımladığımız delay işlemini fonksiyon halinede getirelim.
+Tabi ki bu kodu inanılmaz derecede basit tuttum ve bu yüzden de bellek problemleri var. Kullanmak için tek yapılması gereken `run(generator())` çağrısı yapmak. Daha önce tanımladığımız delay işlemini fonksiyon halinede getirelim.
 
 ```ts
 function delay(time) {
@@ -271,60 +270,60 @@ function* merhaba() {
 run(merhaba());
 ```
 
-Gerçekten çok rahat okunabilir bu kod ile 1 saniye aralıklarla merhaba dünya yazdırdık.
+1 saniye aralıklarla merhaba dünya yazdırdık.
 
 Bu run metodunu biraz daha mükemmelleştirip aşağıdaki haline getirdim. Ancak bu sefer pek direkt satır satır anlaşılmıyor. Zaten bu kısmın kullanıcı tarafından anlaşılmasına pek gerek yok. 
 
 ```ts
 function run(g) {
-  return new Promise(function (resolve, reject) {
+  return new Promise(function (resolve, reject) { // kendisi bir promise döndürüyor.
     (function innerRun(g, data) {
-      var i = g.next(data);
-      if (!i.done) {
-        if (i.value != undefined && i.value.constructor == Promise) {
-          i.value.then(function (data) {
-            setTimeout(function (g) {
-              innerRun(g, data);
+      var i = g.next(data); // bir sonraki değeri getir
+      if (!i.done) { // eğer bitmediyse
+        if (i.value != undefined && i.value.constructor == Promise) { // değer promise ise
+          i.value.then(function (data) { // promise'in bitmesini bekle
+            setTimeout(function (g) { // stack'in şişmesini engelliyoruz bu çağrıyla
+              innerRun(g, data); // kendini çağır 
             }, null, g);
-          }).catch(function (e) {
-            g.throw(e);
+          }).catch(function (e) { // promise hata döndürürse
+            g.throw(e); // ilgili satırda hata fırlat
           });
-        } else if (i.value != undefined && i.value.toString() == "[object Generator]") {
-          setTimeout(function (i, g) {
-            run(i.value).then(function (data) {
+        } else if (i.value != undefined && i.value.toString() == "[object Generator]") { // eğer değer bir generatörse
+          setTimeout(function (i, g) { // stack'in şişmesini engelle
+            run(i.value).then(function (data) { // run çağrısı yap ve bittiğinde geri innerRun fonksiyonunu tetikle
               innerRun(g, data);
             }).catch(function (e) {
               g.throw(e);
             });
           }, null, i, g);
-        } else if (i.value != undefined && i.value.constructor == Array) {
-          setTimeout(function (i, g) {
-            var arr = i.value.map(function (t) {
-              if (t == null) {
+        } else if (i.value != undefined && i.value.constructor == Array) { // eğer değer bir dizi ise
+          setTimeout(function (i, g) { // stack'in şişmesini engelle
+            var arr = i.value.map(function (t) { // her bir değer için
+              if (t == null) { // null olmayanları
                 return;
               }
 
-              if (t.constructor == Promise) {
+              if (t.constructor == Promise) { // promise olanlar direkt olarak geçecek şekilde 
                 return t;
               }
 
-              if (t.toString() == "[object Generator]") {
+              if (t.toString() == "[object Generator]") { // generatörler run'ı çağıracak biçimde
                 return run(t);
               }
             });
-            Promise.all(arr).then(function (data) {
+            Promise.all(arr).then(function (data) { // promise.all çağrısı yap bu sayede tüm bu promise'lerin bitmesini bekle
               innerRun(g, data);
             }).catch(function (e) {
               g.throw(e);
             });
           }, null, i, g);
-        } else {
-          setTimeout(function (i, g) {
+        } else { // eğer değer ne promise ne generatör nede diziyse
+          setTimeout(function (i, g) { // stack'in şişmesini engelle
             innerRun(g, i.value);
           }, null, i, g);
         }
-      } else {
-        resolve(i.value);
+      } else { // done: true ise
+        resolve(i.value); // bitir.
       }
     })(g);
   });
