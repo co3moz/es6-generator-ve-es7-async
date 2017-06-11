@@ -79,12 +79,13 @@ function* generator() {
   console.log("merhaba");
   yield 8;
   yield 9;
+  return 10;
 }
 
 var g = generator();
 g.next(); // {value: 8, done: false}
 g.next(); // {value: 9, done: false}
-g.next(); // {value: undefined, done: true}
+g.next(); // {value: 10, done: true}
 ```
 
 Bu fikirden yola çıkarak fibonacci sayılarını generate edebiliriz.
