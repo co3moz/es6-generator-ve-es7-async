@@ -9,7 +9,7 @@ Generatörler adlandırıldığı gibi bir takım fonksiyondur. Normal bir fonks
 Generatör fonksiyonumuzu tanımlarken normal fonksiyona ek, `*` (yıldız) karakterini kullanmamız gerekiyor.
 
 
-```es6
+```ts
 function* generator() {
 
 }
@@ -18,7 +18,7 @@ function* generator() {
 Bu generator fonksiyonumuzu çağırdığımız taktirde generator'ün gövdesinde tanımlı olan kod parçası çalışmaz.
 
 
-```es6
+```ts
 function* generator() {
   console.log("merhaba");
 }
@@ -28,7 +28,7 @@ generator();
 
 Bunun yerine generator fonksiyonu özel başka bir obje döndürüyor. Eğer dönen bu objenin `.next()` metodunu çağırırsanız merhaba yazısını görebileceksiniz.
 
-```es6
+```ts
 function* generator() {
   console.log("merhaba");
 }
@@ -47,26 +47,26 @@ Generatörlerin done objesi döndürdüğünü gördük, demek ki biz generatör
 
 `yield` tıpkı return gibi fonksiyondan çıkışı sağlar ancak returnun aksine çıkılan bu fonksiyona tekrar girişi mümkün kılar. Sadece bu da değil; çıkılan noktaya dışardan değer girilebilmesinide sağlar.
 
-```es6
+```ts
 function* generator() {
   console.log("merhaba");
   yield;
 }
 
 var g = generator();
-g.next(); // "merhaba yazıldı" ve {value: undefined, done: false} döndürüldü
+g.next(); // "merhaba" yazıldı ve {value: undefined, done: false} döndürüldü
 ```
 
 Gördüğünüz gibi bu sefer done değeri false oldu. Eğer bir defa daha `.next()` metodunu çalıştırırsak;
 
-```es6
+```js
 function* generator() {
   console.log("merhaba");
   yield;
 }
 
 var g = generator();
-g.next(); // "merhaba yazıldı" ve {value: undefined, done: false} döndürüldü
+g.next(); // "merhaba" yazıldı ve {value: undefined, done: false} döndürüldü
 g.next(); // {value: undefined, done: true} döndürüldü
 ```
 
@@ -74,7 +74,7 @@ Done değeri true olacak. `.next()` metodu çağrıldığında yield ifadesine g
 
 Eğer bir değer döndürmek istersek yield'in sağına yazabiliriz.
 
-```es6
+```ts
 function* generator() {
   console.log("merhaba");
   yield 8;
@@ -89,7 +89,7 @@ g.next(); // {value: undefined, done: true}
 
 Bu fikirden yola çıkarak fibonacci sayılarını generate edebiliriz.
 
-```es6
+```ts
 function* fibonacci() {
   let a = 1, b = 1;
   for(;;) {
@@ -113,7 +113,7 @@ Bu generatorümüzün herhangi bir sonu yok. Yani done asla true olmayacak.
 
 Generatörlerimizi for-of syntaxı içinde kullanmamız mümkündür. Ancak bir önceki örnekte olduğu gibi sonsuz olmasından kaçının. Her bir iteration'da `.next()` çağrısı yapılacak ve döndürülen değer değişkene yansıtılacak. For gövdesindeki işler tamamlandıktan sonra tekrar `.next()` çağrısı yapılacak. done true olduğu an döngü kırılacak. 
 
-```es6
+```ts
 function* fibonacci(limit) {
   let a = 1, b = 1;
   while(limit--) {
@@ -133,7 +133,7 @@ for(sayi of fibonacci(10)) {
 
 Bu kodumuzun konsol çıktısı;
 
-```
+```ts
 bir sonraki :2
 2
 bir sonraki :3
@@ -160,7 +160,7 @@ bitti
 ## next, throw ve return
 `.next()` metodunun bir parametre girişi vardır. Bu girişten vereceğimiz sayı ile yield alanına sayı göndermemiz mümkündür.
 
-```es6
+```ts
 function* say() {
   var baslangic = yield;
   console.log(baslangic);
@@ -173,7 +173,7 @@ s.next(3); // 3
 
 `.throw()` metodu tıpkı next gibi kodun bulunduğu yerde throw yapar.
 
-```es6
+```ts
 function* say() {
   try {
     yield Math.random();
@@ -191,7 +191,7 @@ if(s.next().value > 0.5) {
 
 `.return()` metodu generatorü sonlandırarak ilk parametredeki değeri value olarak döndürür. 
 
-```es6
+```ts
 function* say() {
   console.log(1);
   yield 1;
@@ -211,7 +211,7 @@ s.next(); // {value: undefined, done: true}
 
 Bence tüm bu olayların dışında yield'ın en güzel olayı asenkron işleri yapmakta çatı sağlaması. Şimdi teorik olarak düşünelim. yield bir fonksiyon generatörünü durduruyor. Sadece durdurmakla kalmıyor bize veride veriyor. Biz yield'ta promise alsak, ve bu promise'nin bittiğinde başka bir next çağırmasını sağlasak callbacklerden kurtulmuş olmaz mıyız?
 
-```es6
+```ts
 function* asenkron() {
   yield new Promise(function(resolve) {
     setTimeout(function() {
@@ -230,7 +230,7 @@ promise.then(function() {
 
 Bu kod ile 1 saniye bekledikten sonra merhaba yazdırdık. Öyle bir fonksiyon tasarlayalım ki bu işi bizim yerimize o yapsın.
 
-```es6
+```ts
 function run(g) {
   var i = g.next();
   if (!i.done) {
@@ -249,7 +249,7 @@ function run(g) {
 
 Tabi ki bu kod inanılmaz derecede basit tutuldu ve bu yüzden de bellek açığı var. Kullanmak çok basit tek yapılması gereken `run(generator())` çağrısı yapmak. Yukarda daha önce tanımladığımız delay işlemini fonksiyon halinede getirelim.
 
-```es6
+```ts
 function delay(time) {
   return new Promise(function(resolve) {
     setTimeout(function() {
@@ -259,7 +259,7 @@ function delay(time) {
 }
 ```
 
-```es6
+```ts
 function* merhaba() {
   yield delay(1000);
   console.log("merhaba");
@@ -274,7 +274,7 @@ Gerçekten çok rahat okunabilir bu kod ile 1 saniye aralıklarla merhaba dünya
 
 Bu run metodunu biraz daha mükemmelleştirip aşağıdaki haline getirdim. Ancak bu sefer pek direkt satır satır anlaşılmıyor. Zaten bu kısmın kullanıcı tarafından anlaşılmasına pek gerek yok. 
 
-```es6
+```ts
 function run(g) {
   return new Promise(function (resolve, reject) {
     (function innerRun(g, data) {
@@ -334,7 +334,7 @@ Bu fonksiyon ile aşağıdaki işlemleri yapabilirsiniz;
 
 * Promise döndürerek bitişi takip etmek.
 
-```es6
+```ts
 run(generator()).then(function() {
 
 });
@@ -343,7 +343,7 @@ run(generator()).then(function() {
 * Promise hata verdiğinde ilgili satırda exception fırlatımı
 * Kod içerisinde başka bir generator fonksiyonu çağırabilirsiniz. örneğin;
 
-```es6
+```ts
 function* taskA() {
   console.log("taskA");
   yield taskB();
@@ -361,7 +361,7 @@ run(taskA()).then(function() {
 });
 ```
 
-```
+```ts
 taskA
 taskB
 * 1 saniye bekler
@@ -372,7 +372,7 @@ tüm tasklar bitti
 
 * Dizi verilerek birden fazla taskın bitmesini bekleyebilirsiniz
 
-```es6
+```ts
 function* taskA() {
   yield delay(2000);
   console.log("taskA");
