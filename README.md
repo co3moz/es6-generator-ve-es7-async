@@ -347,6 +347,37 @@ function* taskX() {
 run(taskX());
 ```
 
+> **Ekleme:** `yield` keywordu eğer bir `*` yıldızla kullanılırsa sağında verilen nesnenin yield özelliklerini öğrenebilir. Örneğin;
+> 
+> ```ts
+> function* say() {
+>  yield 1;
+>  yield 2;
+> }
+> 
+> function* okubakim() {
+>   yield* say();
+> }
+> 
+> let oku = okubakim();
+> oku.next(); // {value: 1, done: false}
+> oku.next(); // {value: 2, done: false}
+> oku.next(); // {value: undefined, done: true}
+> ```
+> 
+> Ayrıca `yield*` dizi değerlerini tek tek verebilir ve string'in karakterlerini tek tek okuyabilir.
+> 
+> ```ts
+> function* ayi() {
+>   yield* "ayi";
+> }
+> let neymis = ayi();
+> neymis.next(); {value: 'a', done: false}
+> neymis.next(); {value: 'y', done: false}
+> neymis.next(); {value: 'i', done: false}
+> neymis.next(); {value: undefined, done: true}
+> ```
+
 # ES7 - Async fonksiyonlar
 
 ES6'da asenkron işleri yönetmenin kolay yolunu gördük. Ancak yield'i direkt olarak fonksiyon çağrısı yaparak kullanamıyoruz. `run()` methoduna ihtiyacımız var. ES7'de bu ihtiyaç kaldırılarak `async function` syntax'ı gelmiştir.
