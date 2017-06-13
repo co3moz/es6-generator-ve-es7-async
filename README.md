@@ -158,6 +158,39 @@ bir sonraki :144
 bitti
 ```
 
+Bir örnek daha verelim. for-of syntaxını dizilerin değerlerini okurken kullanıyoruz.
+
+```ts
+let dizi = [1, 2, 3];
+for (let eleman of dizi) {
+  console.log(eleman); // 1 .. 2 .. 3
+}
+```
+
+Ancak objelerin key ve value'leri arasında gezemiyoruz.
+
+```ts
+let obje = {a: 1, b: 2};
+for (let eleman of obje) { // Uncaught TypeError: undefined is not a function
+  console.log(eleman); 
+}
+```
+
+Bu problemi generator fonksiyonuyla çözebiliriz,
+
+```ts
+function* entries(obj) {
+   for (let key of Object.keys(obj)) {
+     yield [key, obj[key]];
+   }
+}
+
+let obje = {a: 1, b: 2};
+for (let [key, value] of entries(obje)) {
+  console.log(key, value);  // a, 1 .. b, 2
+}
+```
+
 ## next, throw ve return
 `.next()` metodunun bir parametre girişi vardır. Bu girişten vereceğimiz sayı ile `yield` alanına sayı göndermemiz mümkündür.
 
