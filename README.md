@@ -9,7 +9,7 @@ We will look and feel the generator functions in ES6 and the async functions in 
 
 Generators are some functions as named. Unlike a normal function, generator function is continue from where it stopped in runtime. That's why, when the function run a process, returned step by step instead of returned at once.
 
-When defining the generator function, we'll use an additional `*` (star) character in the normal function.
+When defining the generator function, we'll use an additional `*` (asterisk) character in the normal function.
 
 ```ts
 function* generator() {
