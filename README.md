@@ -1,7 +1,7 @@
 ###### Translate EN, [@co3moz](https://github.com/co3moz)'s [es6-generator-ve-es7-async](https://github.com/co3moz/es6-generator-ve-es7-async) repo. 
 
 # ES6 generator and ES7 async functions (EN)
-We will examine the generator functions in ES6 and the async functions in ES7 in this repository.
+We will look and feel the generator functions in ES6 and the async functions in ES7 in this repository.
 
 # ES6 - Generators 
 
