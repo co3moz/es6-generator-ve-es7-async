@@ -1,13 +1,15 @@
-# ES6 generator and ES7 async functions (TR)
-Bu repository altında ES6'da bulunan generatör fonksiyonlarını ve ES7'de bulunan async fonksiyonlarını inceleyeceğiz.
+###### Translate EN, [@co3moz](https://github.com/co3moz)'s [es6-generator-ve-es7-async](https://github.com/co3moz/es6-generator-ve-es7-async) repo. 
 
-# ES6 - Generatörler
+# ES6 generator and ES7 async functions (EN)
+We will examine the generator functions in ES6 and the async functions in ES7 in this repository.
 
-## Nedir bu generatorler?
-Generatörler adlandırıldığı gibi bir takım fonksiyondur. Normal bir fonksiyondan farklı olarak çalışma zamanından kaldığı yerden devam etme özelliği taşırlar. Bu sayede bir işi üretirken bir anda döndürmek yerine parça parça döndürebilme yeteneğine sahiptirler.
+# ES6 - Generators 
 
-Generatör fonksiyonumuzu tanımlarken normal fonksiyona ek, `*` (yıldız) karakterini kullanmamız gerekiyor.
+## What is these generators?
 
+Generators are some functions as named. Unlike a normal function, generator function is continue from where it stopped in runtime. That's why, when the function run a process, returned step by step instead of returned at once.
+
+When defining the generator function, we'll use an additional `*` (star) character in the normal function.
 
 ```ts
 function* generator() {
@@ -15,8 +17,7 @@ function* generator() {
 }
 ```
 
-Bu generator fonksiyonumuzu çağırdığımız taktirde generator'ün gövdesinde tanımlı olan kod parçası çalışmaz.
-
+If we call this generator function, the code will not work which defined in the generator function's body.
 
 ```ts
 function* generator() {
@@ -26,7 +27,7 @@ function* generator() {
 generator();
 ```
 
-Bunun yerine generator fonksiyonu özel başka bir obje döndürüyor. Eğer dönen bu objenin `.next()` metodunu çağırırsanız merhaba yazısını görebileceksiniz.
+Instead of this, the generator function returns another some special object. If you call this returning objects `.next()` method, you can see "merhaba" in your console.
 
 ```ts
 function* generator() {
@@ -34,18 +35,18 @@ function* generator() {
 }
 
 var g = generator();
-g.next(); // "merhaba" yazıldı ve {value: undefined, done: true} döndürüldü
+g.next(); // writed "merhaba" and returned {value: undefined, done: true}
 ```
 
-Gördüğünüz gibi metod başka bir obje döndürdü. Burada `value` undefined olarak atanmış ve `done` ise true. `done` ifadesi generatör fonksiyonun tüm işlevinin bittiğini gösteriyor. `value` ise return edilen değeri getiriyor. 
+As you see, method returned another object. In this case, `value` assigned undefined and `done` assigned true.  `done` statement indicates that all the functions of the generators are finished. `value` statement  assigned the returned value.
 
-Buraya kadar normal fonksiyonun dışında farklı bir işlem göremedik ancak işler daha yeni kızışmaya başladı.
+Until now, we can't see anything other than normal function but just started to shit happening.
 
 ## Yield
 
-Generatörlerin `done` değeri döndürdüğünü gördük, demek ki biz generatörleri bir şey kullanarak durdurabiliyoruz. `yield` bu işi yapmamızı sağlayan özelliktir.
+We've seen generators return the `done` value so anyway we can stop the generators using something. `yield` is the property that doing this.
 
-`yield` tıpkı return gibi fonksiyondan çıkışı sağlar ancak returnun aksine çıkılan bu fonksiyona tekrar girişi mümkün kılar. Sadece bu da değil; çıkılan noktaya dışardan değer girilebilmesinide sağlar.
+`yield` is exit the function just like return, but yield makes it possible re-enter the function instead of return statement.  Not only that; it also allows set a value from exit position in function.
 
 ```ts
 function* generator() {
@@ -57,7 +58,7 @@ var g = generator();
 g.next(); // "merhaba" yazıldı ve {value: undefined, done: false} döndürüldü
 ```
 
-Gördüğünüz gibi bu sefer `done` değeri false oldu. Eğer bir defa daha `.next()` metodunu çalıştırırsak;
+As you see, this time  `done` assigned false. If we call the `.next ()` method one more time;
 
 ```js
 function* generator() {
@@ -66,13 +67,13 @@ function* generator() {
 }
 
 var g = generator();
-g.next(); // "merhaba" yazıldı ve {value: undefined, done: false} döndürüldü
-g.next(); // {value: undefined, done: true} döndürüldü
+g.next(); // writed  "merhaba" and returned {value: undefined, done: false}
+g.next(); // returned {value: undefined, done: true} 
 ```
 
-`done` değeri `true` olacak. `.next()` metodu çağrıldığında `yield` ifadesine gelinceye kadar tüm kodlar sırayla çalıştırılır. `yield` ifadesi geldiğinde eğer return gibi sağında bir değer işlem varsa yapılır, döndürdüğü değer ise `.next()` methodunun döndürdüğü objenin `value` property'sine yazılır.
+`done` value will be `true`. When called `.next()` method, codes are executed step by step until the `yield` expression is reached. When the `yield` expression comes,  if there is a operation on the right side like return statement it runned. The value returned is written to the `value` property of the` .next () `method returned by the method.
 
-Eğer bir değer döndürmek istersek `yield`'in sağına yazabiliriz.
+If we want return a value, we've to write right side of `yield` statement.
 
 ```ts
 function* generator() {
@@ -88,7 +89,7 @@ g.next(); // {value: 9, done: false}
 g.next(); // {value: 10, done: true}
 ```
 
-Bu fikirden yola çıkarak `fibonacci sayılarını` generate edebiliriz.
+From this idea, we can generate `fibonacci numbers`.
 
 ```ts
 function* fibonacci() {
@@ -108,23 +109,23 @@ g.next(); // {value: 5, done: false}
 g.next(); // {value: 8, done: false}
 ```
 
-Bu generatorümüzün herhangi bir sonu yok. Yani `done` asla true olmayacak.
+There is no end to this generator. Mean,  `done` never assigned true.
 
-## for-of altında generatörler
+## generators under for-of
 
-Generatörlerimizi `for-of` syntaxı içinde kullanmamız mümkündür. Ancak bir önceki örnekte olduğu gibi sonsuz olmasından kaçının. Her bir iteration'da `.next()` çağrısı yapılacak ve döndürülen değer değişkene yansıtılacak. For gövdesindeki işler tamamlandıktan sonra tekrar `.next()` çağrısı yapılacak. `done` `true` olduğu an döngü kırılacak. 
+It is possible to use our generators in `for-of` syntax. But as in the previous example, avoid being infinite. In each iteration `.next ()` will be called and returned value will be assigned in a variable. After finished processes in for body,`.next ()` will be called again. When `done` statement equal `true`, loop is breaking.
 
 ```ts
 function* fibonacci(limit) {
   let a = 1, b = 1;
   while(limit--) {
-    console.log("bir sonraki :" + (a + b));
+    console.log("next :" + (a + b));
     yield a + b;
     let t = b;
     b = a + b;
     a = t;
   }
-  console.log("bitti");
+  console.log("hell jah!");
 }
 
 for(sayi of fibonacci(10)) {
@@ -132,51 +133,51 @@ for(sayi of fibonacci(10)) {
 }
 ```
 
-Bu kodumuzun konsol çıktısı;
+This is console log for our code;
 
 ```ts
-bir sonraki :2
+next :2
 2
-bir sonraki :3
+next :3
 3
-bir sonraki :5
+next :5
 5
-bir sonraki :8
+next :8
 8
-bir sonraki :13
+next :13
 13
-bir sonraki :21
+next :21
 21
-bir sonraki :34
+next :34
 34
-bir sonraki :55
+next :55
 55
-bir sonraki :89
+next :89
 89
-bir sonraki :144
+next :144
 144
-bitti
+hell jah!
 ```
 
-Bir örnek daha verelim. for-of syntaxını dizilerin değerlerini okurken kullanıyoruz.
+Let's give one more example. We use the for-of syntax reading the values of an array.
 
 ```ts
-let dizi = [1, 2, 3];
-for (let eleman of dizi) {
-  console.log(eleman); // 1 .. 2 .. 3
+let array = [1, 2, 3];
+for (let i of array) {
+  console.log(i); // 1 .. 2 .. 3
 }
 ```
 
-Ancak objelerin key ve value'leri arasında gezemiyoruz.
+But, we can't navigate between the keys and values of the objects unfortunately.
 
 ```ts
-let obje = {a: 1, b: 2};
-for (let eleman of obje) { // Uncaught TypeError: undefined is not a function
-  console.log(eleman); 
+let object = {a: 1, b: 2};
+for (let i of object) { // Uncaught TypeError: undefined is not a function
+  console.log(i); 
 }
 ```
 
-Bu problemi generator fonksiyonuyla çözebiliriz,
+We can solve this case with generator functions,
 
 ```ts
 function* entries(obj) {
@@ -191,41 +192,41 @@ for (let [key, value] of entries(obje)) {
 }
 ```
 
-## next, throw ve return
-`.next()` metodunun bir parametre girişi vardır. Bu girişten vereceğimiz sayı ile `yield` alanına sayı göndermemiz mümkündür.
+## next, throw and return
+`.next()` method have a single parameter. It is possible send a number to `yield` with this number we will give.
 
 ```ts
-function* say() {
-  var baslangic = yield;
-  console.log(baslangic);
+function* count() {
+  var start = yield;
+  console.log(start);
 }
 
-var s = say();
-s.next(); // yield alanına kadar next yapıyoruz.
+var s = count();
+s.next(); // 'next' from yield area.
 s.next(3); // 3
 ```
 
-`.throw()` metodu tıpkı next gibi kodun bulunduğu yerde `throw` yapar.
+`.throw ()` method throws `throw` where the code is in like next method.
 
 ```ts
-function* say() {
+function* count() {
   try {
     yield Math.random();
   } catch(e) {
-    console.error(e); // 0.5'ten büyük olmamalı
+    console.error(e); // Not greater than 0.5
   }
 }
 
-var s = say();
+var s = count();
 if(s.next().value > 0.5) {
-  s.throw(new Error("0.5'ten büyük olmamalı"));
+  s.throw(new Error("Not greater than 0.5"));
 }
 ```
 
-`.return()` metodu generatorü sonlandırarak ilk parametredeki değeri value olarak döndürür. 
+`.return ()` method terminates the generator function and return first parameter as value.
 
 ```ts
-function* say() {
+function* count() {
   console.log(1);
   yield 1;
   console.log(2);
@@ -234,18 +235,18 @@ function* say() {
   yield 3;
 }
 
-var s = say();
+var s = count();
 s.next(); // {value: 1, done: false}
 s.return(4); // {value: 4, done: true}
 s.next(); // {value: undefined, done: true}
 ```
 
-## Yield ve asenkron işler
+## Yield and asynchronous things
 
-Bence tüm bu olayların dışında `yield`'ın en güzel olayı asenkron işleri yapmakta çatı sağlaması. Şimdi teorik olarak düşünelim. `yield` bir fonksiyon generatörünü durduruyor. Sadece durdurmakla kalmıyor bize veride veriyor. Biz `yield`'da `promise` versek, ve bu `promise` bittiğinde başka bir next çağırmasını sağlasak callbacklerden kurtulmuş olmaz mıyız?
+I think that the most beautiful thing of `yield` apart from all these things is providing the support for asynchronous work. Let's thinking theoretical right now.  `yield` stop (pause actually) a genetor. It doesn't just stop also gives us data. If we have a `promise` in `yield` and when finised this `promise` we suplly another next call, have we get rid of callbacks?
 
 ```ts
-function* asenkron() {
+function* asyn() {
   yield new Promise(function(resolve) {
     setTimeout(function() {
       resolve();
@@ -254,33 +255,33 @@ function* asenkron() {
   console.log("merhaba");
 }
 
-var s = asenkron();
+var s = asyn();
 var promise = s.next().value; // {value: Promise, done: false}
 promise.then(function() {
   s.next();
 });
 ```
 
-Bu kod ile 1 saniye bekledikten sonra merhaba yazdırdık. Öyle bir fonksiyon tasarlayalım ki bu işi bizim yerimize o yapsın.
+With this code, after wait 1 second, writted 'merhaba'. So let's design such a function that you do it for us.
 
 ```ts
 function run(g) {
-  var i = g.next(); // bir sonraki değeri getir
-  if (!i.done) { // eğer bitmediyse
-    if (i.value && i.value.constructor == Promise) { // dönen değer promise ise
-      i.value.then(function (data) { // promise'in bitmesini bekle
-        run(g); // yeniden kendini çağır
-      }).catch(function (e) { // hata oluştuysa
-        g.throw(e); // ilgili yerde hata fırlat
+  var i = g.next(); // get next value
+  if (!i.done) { //  if not done
+    if (i.value && i.value.constructor == Promise) { // if returned value is promise
+      i.value.then(function (data) { // wait finish promise
+        run(g); //re-call yourself
+      }).catch(function (e) { // if we have any error
+        g.throw(e); // throw
       });
-    } else { // eğer promise değilse sadece devam et
+    } else { // it is not promis, just next.
       run(g);
     }
   }
 }
 ```
 
-Tabi ki bu kodu inanılmaz derecede basit tuttum ve bu yüzden de bellek problemleri var. Kullanmak için tek yapılması gereken `run(generator())` çağrısı yapmak. Daha önce tanımladığımız delay işlemini fonksiyon halinede getirelim.
+Of course this code is extremely simple that's why it have some memory problems. All you have to use this, `run (generator ())` call.  Let's transform delay process -that we have already defined- with  function.
 
 ```ts
 function delay(time) {
@@ -293,69 +294,67 @@ function delay(time) {
 ```
 
 ```ts
-function* merhaba() {
+function* hello() {
   yield delay(1000);
   console.log("merhaba");
   
   yield delay(1000);
   console.log("dünya");
 }
-run(merhaba());
+run(hello());
 ```
 
-1 saniye aralıklarla merhaba dünya yazdırdık.
+We printed the 'merhaba dünya' at 1 second intervals.
 
-Bu run methodu bazı işleri yapmak için yetersiz. Bu durumlarda [co](https://www.npmjs.com/package/co) kütüphanesi gibi kütüphaneler kullanabilirsiniz. Bu kütüphanelerin nasıl yazıldığıyla daha fazla bilginiz olsun diye yukardakinden daha gelişmiş bir [run methodu](run.md) yazdım.
+This run method is for deficient some cases. In this cases, you can use some libraries like [co](https://www.npmjs.com/package/co). I wrote a more advanced [run method] (run.md) to get more information on how these libraries are written. 
 
+It may be a little bit difficult to understand this function but these library and similar libraries can do this cases,
 
-Fonksiyonu anlamak biraz güç olabilir ancak bu ve benzeri kütüphaneler aşağıdaki işleri yapabilirler.
-
-* Promise döndürerek bitişi takip etmek.
-
+* Followed done statement with return promise.
 ```ts
 run(generator()).then(function() {
 
 });
 ```
 
-* Promise hata verdiğinde ilgili satırda exception fırlatımı
-* Kod içerisinde başka bir generator fonksiyonu çağırabilirsiniz. örneğin;
+* When promise error, throwing exception on these line.
+* You can call another generator function in code. for example;
 
 ```ts
 function* taskA() {
   console.log("taskA");
   yield taskB();
-  console.log("taskA bitti");
+  console.log("taskA done");
 }
 
 function* taskB() {
   console.log("taskB");
   yield delay(1000);
-  console.log("taskB bitti");
+  console.log("taskB done");
 }
 
 run(taskA()).then(function() {
-  console.log("tüm tasklar bitti");
+  console.log("All tasks done");
 });
 ```
 
 ```ts
 taskA
 taskB
-* 1 saniye bekler
-taskB bitti
-taskA bitti
-tüm tasklar bitti
+* Waiting 1 second
+taskB done
+taskA done
+All tasks done
 ```
 
-* Dizi verilerek birden fazla taskın bitmesini bekleyebilirsiniz
+* You can wait for more task to finish using an array
 
 ```ts
 function* taskA() {
   yield delay(2000);
   console.log("taskA");
   yield delay(1000);
-  console.log("taskA bitti");
+  console.log("taskA done");
   return "A";
 }
 
@@ -363,7 +362,7 @@ function* taskB() {
   yield delay(500);
   console.log("taskB");
   yield delay(500);
-  console.log("taskB bitti");
+  console.log("taskB done");
   return "B";
 }
 
@@ -374,73 +373,71 @@ function* taskX() {
   let arr = yield [taskA(), taskB()];
   console.log(arr);
   yield delay(1000);
-  console.log("taskX bitti");
+  console.log("taskX done");
 }
 
 run(taskX());
 ```
-
-> **Ekleme:** `yield` keywordu eğer bir `*` yıldızla kullanılırsa sağında verilen nesnenin yield özelliklerini öğrenebilir. Örneğin;
+> **PS:** If `yield` keyword used with an `*` asterisk, it can known the yield properties of the given object to it own right. For example;
 > 
 > ```ts
-> function* say() {
+> function* count() {
 >  yield 1;
 >  yield 2;
 > }
 > 
-> function* okubakim() {
->   yield* say();
+> function* readThis() {
+>   yield* count();
 > }
 > 
-> let oku = okubakim();
-> oku.next(); // {value: 1, done: false}
-> oku.next(); // {value: 2, done: false}
-> oku.next(); // {value: undefined, done: true}
+> let read = readThis();
+> read.next(); // {value: 1, done: false}
+> read.next(); // {value: 2, done: false}
+> read.next(); // {value: undefined, done: true}
 > ```
 > 
-> Ayrıca `yield*` dizi değerlerini tek tek verebilir ve string'in karakterlerini tek tek okuyabilir.
-> 
+> Also, `yield*` can return array values one-by-one and read the characters of the string one-by-one.
+>
 > ```ts
-> function* ayi() {
->   yield* "ayi";
+> function* dogsOut() {
+>   yield* "who";
 > }
-> let neymis = ayi();
-> neymis.next(); {value: 'a', done: false}
-> neymis.next(); {value: 'y', done: false}
-> neymis.next(); {value: 'i', done: false}
-> neymis.next(); {value: undefined, done: true}
+> let whoLetThe = dogsOut();
+> whoLetThe.next(); {value: 'w', done: false}
+> whoLetThe.next(); {value: 'h', done: false}
+> whoLetThe.next(); {value: 'o', done: false}
+> whoLetThe.next(); {value: undefined, done: true}
 > ```
 
-# ES7 - Async fonksiyonlar
+# ES7 - Async functions
 
-ES6'da asenkron işleri yönetmenin kolay yolunu gördük. Ancak yield'i direkt olarak fonksiyon çağrısı yaparak kullanamıyoruz. `run()` methoduna ihtiyacımız var. ES7'de bu ihtiyaç kaldırılarak `async function` syntax'ı gelmiştir.
-
+We've seen the easy way to manage async cases in ES6. But, we can't use yield directly making function call. We need `run()` method. In ES7, this requirement has been removed and the `async function` syntax has been introduced.
 
 ```ts
-async function merhaba() {
+async function hello() {
 
 }
 ```
 
-Yukardaki gibi asenkron fonksiyon tanımlaması yapabiliriz. 
+We can do asynchronous function definition like as you can see at above.
 
 ```ts
-async function merhaba() {
+async function hello() {
   console.log("merhaba");
 }
-merhaba();
+hello();
 ```
 
-ES6'da `run()` methodunu kullanmamız gerekirken, burada direkt olarak fonksiyon çağrısı yaptık. Asenkron fonksiyonları sanki promise yapısına çeviren bir keyword olarak düşünebiliriz.
+In ES6 we have to use `run()` method, but in this case we have directly call function. We can think of asynchronous functions as a keyword that translates into promise.
 
 ```ts
-async function selam() {
+async function hi() {
   console.log("merhaba");
 }
 
-// aşağıdaki gibi derleniyor
+// compiled like this,
 
-function selam() {
+function hi() {
   return new Promise(function(resolve, reject) {
     try {
       console.log("merhaba");
@@ -451,13 +448,13 @@ function selam() {
   });
 }
 
-//  asenkron fonksiyon mutlaka bir promise döndürür.
-selam().then(function() {
-  console.log("çalıştı");
+// async function definetly return a promise.
+hi().then(function() {
+  console.log("runned");
 })
 ```
 
-Peki bu async fonksiyonlarla neler yapabilirim. ES6'da `yield`'ı asenkron işleri bekletmek için kullanabiliyorduk. ES7'de bu iş için `await` keywordu bulunmaktadır.
+Okay then, what can i do this async functions? In ES6 we can use `yield` to pause asynchronous cases. But in ES7 `await` keyword for asynchronous cases.
 
 ```ts
 function delay(ms) {
@@ -466,16 +463,16 @@ function delay(ms) {
   });
 }
 
-async function selam() {
+async function hi() {
   console.log("merhaba");
   await delay(1000);
   console.log("dünya");
 }
 
-selam();
+hi();
 ```
 
-async fonksiyonlar promise döndürdüğü için bir async fonksiyonu içinde await ile başka bir async fonksiyonu bekletebiliriz.
+Because of async functions return promise, we can pause another async function in async function with await.
 
 ```ts
 async function taskA() {
@@ -489,15 +486,15 @@ async function taskB() {
   return "B";
 }
 
-taskA().then(function(sonuc) {
-  console.log(sonuc); // AB
+taskA().then(function(result) {
+  console.log(result); // AB
 })
 ```
 
-Örnektede görüldüğü gibi await'i herhangi bir expression içinde kullanmamız mümkün. Bu sayede bir değişkene değer atayabiliriz. Döndürdüğümüz değer await'in bulunduğu konuma yerleştirilecektir.
+As you see this example, possible to use await in any expression. In this way we can set value for any variable.
 
-> **Önemli Not:** Bu tüm işlemler sırasında try catch kullanmanız şiddetle önerilir. İlerki Node.js sürümlerinde eğer promisede oluşmuş bir hata varsa ve catch ile yakalanmamışsa uygulama çökmüş gibi `process.exit()` işlemi yapılacaktır.
+> **Important PS:** During all of these happened, extremely recommended to you use try catches. If there is an error in promise at new added Node.js releases and if this error is not catched, `process.exit ()` will be executed like application crashes.
 
-> **Not:** `await` keywordune `null` verirsek bir hataya neden olmayacaktır.
+> **PS:** If we set `null` of `await` keyword, it's not an error.
 
-> **Not:** `await` keywordune promise harici bir değer verirsek direkt olarak pass edecektir yani `let t = await 1;` yaparsanız t değeri direkt 1 olacaktır. Normal fonksiyonları versenizde aynı şekide pass işlemi yapılacaktır.
+> **PS:** If you give an external value to the promise, `await` keyword will pass directly. I mean, if write `let t = await 1;`, t value is equal 1. The normal function will be passed in the same way.
