@@ -55,7 +55,7 @@ function* generator() {
 }
 
 var g = generator();
-g.next(); // "merhaba" yazıldı ve {value: undefined, done: false} döndürüldü
+g.next(); // writed  "merhaba" and returned {value: undefined, done: false}
 ```
 
 As you see, this time  `done` assigned false. If we call the `.next ()` method one more time;
